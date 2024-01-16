@@ -8,3 +8,7 @@ Consume Responsibly.
 Setup:
 `npm install`
 `npm start`
+
+Sources Referenced:
+Material UI login styling: https://mui.com/material-ui/getting-started/templates/
+React Hook Form Integration with MUI: https://refine.dev/blog/react-hook-form-validation-examples/#what-is-react-hook-form
