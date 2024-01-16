@@ -10,5 +10,5 @@ Setup:
 `npm start`
 
 Sources Referenced:
-Material UI login styling: https://mui.com/material-ui/getting-started/templates/
-React Hook Form Integration with MUI: https://refine.dev/blog/react-hook-form-validation-examples/#what-is-react-hook-form
+* Material UI login styling: https://mui.com/material-ui/getting-started/templates/
+* React Hook Form Integration with MUI: https://refine.dev/blog/react-hook-form-validation-examples/#what-is-react-hook-form
