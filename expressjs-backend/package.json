@@ -1,0 +1,17 @@
+{
+  "name": "expressjs-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "yup": "^1.3.3"
+  }
+}

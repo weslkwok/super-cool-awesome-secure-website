@@ -7,6 +7,7 @@ import { fakeAuth } from "./utils/FakeAuth";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "./context/AuthProvider";
 import { AuthProvider } from "./context/AuthProvider";
+import { Registration } from "./Registration";
 
 export const AuthContext = React.createContext(null);  // we will use this in other components
 
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="landing" element={
           <ProtectedRoute><Landing /></ProtectedRoute>} />
         <Route path="home" element={ <Home />} />
+        <Route path="register" element={ <Registration/>} />
         <Route path="*" element={<p>There's nothing here: 404!</p>} />
       </Routes>
     </AuthProvider>
@@ -46,6 +48,7 @@ const Navigation = () => {
   <nav>
     <NavLink to="/home">Home</NavLink>
     <NavLink to="/landing">Landing</NavLink>
+    <NavLink to="/register">Register</NavLink>
     {value.token && (
     <button type="button" onClick={value.onLogout}>
       Sign Out

@@ -48,7 +48,12 @@ const themeBlue = createTheme({
   }
 });
 
-export const Home = () => {
+/* TODO:
+    - refactor registration to not replicate login code (i.e. reusability)
+    - error checking from backend messages
+*/
+
+export const Registration = () => {
   const { value } = useAuth();
 
   const {
@@ -64,14 +69,14 @@ export const Home = () => {
   
 const handleSubmission = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/account/login', data);
+    const response = await axios.post('http://localhost:8000/account/register', data);
     console.log(response.data);
     /* TODO: update login function to take in token from server (instead of having the fake one)
     - add argument to pass in token? Or handle login completely in the auth component (probs better)
     */
     value.onLogin()
   } catch (error) {
-    console.error('Failed Login:', error.response ? error.response.data : error.message);
+    console.error('Failed Registration:', error.response ? error.response.data : error.message);
     /* TODO: better handle error when failed login
     - some indication of failed login on page (either in form, or around form?)
     */
@@ -91,7 +96,7 @@ const handleSubmission = async (data) => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <Box component="form" onSubmit={handleSubmit(handleSubmission)} sx={{ mt: 1 }}>
             <Controller
@@ -144,7 +149,7 @@ const handleSubmission = async (data) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Register
             </Button>
           </Box>
         </Box>
