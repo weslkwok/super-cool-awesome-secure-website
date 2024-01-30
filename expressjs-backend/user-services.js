@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import userModel from "./user.js";
+import userModel from "./models/users.js";
 
 // uncomment the following line to view mongoose debug messages
 mongoose.set("debug", true);
@@ -11,21 +11,18 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-async function getUsers(name, job) {
+async function getUsers(email) {
   let result;
-  if (name === undefined && job === undefined) {
+  if (email === undefined) {
     result = await userModel.find();
-  } else if (name && !job) {
-    result = await findUserByName(name);
-  } else if (job && !name) {
-    result = await findUserByJob(job);
   }
   return result;
 }
 
-async function findUserById(id) {
+async function findUserByEmail(email) {
   try {
-    return await userModel.findById(id);
+    console.log("FINDING ID: " + email);
+    return await userModel.find({email: email});
   } catch (error) {
     console.log(error);
     return undefined;
@@ -34,6 +31,7 @@ async function findUserById(id) {
 
 async function addUser(user) {
   try {
+    console.log('adding user')
     const userToAdd = new userModel(user);
     const savedUser = await userToAdd.save();
     return savedUser;
@@ -43,18 +41,8 @@ async function addUser(user) {
   }
 }
 
-async function findUserByName(name) {
-  return await userModel.find({ name: name });
-}
-
-async function findUserByJob(job) {
-  return await userModel.find({ job: job });
-}
-
 export default {
   addUser,
   getUsers,
-  findUserById,
-  findUserByName,
-  findUserByJob,
+  findUserByEmail,
 };

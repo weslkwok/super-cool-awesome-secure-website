@@ -1,5 +1,6 @@
-const express = require('express');
-const { body, validationResult } = require('express-validator');
+import express from 'express';
+import { body, validationResult } from 'express-validator';
+import userServices from './user-services.js';
 
 const app = express();
 app.use(express.json());
@@ -16,18 +17,14 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-const hardcodedUser = {
-    userid: "bj@test.com",
-    password: "pass424"
-};
 
-// User list. will be turned into a database eventually, I suppose.
-const userList = [hardcodedUser];
-
-app.post('/account/login', (req, res) => {
+app.post('/account/login', async (req, res) => {
     console.log(req.body);
     const { email, password } = req.body;
-    if (email === hardcodedUser.userid && password === hardcodedUser.password) {
+    const emailQuery = await userServices.findUserByEmail(email);
+    console.log('EMAILQEUERYRYRY is: ' + emailQuery)
+    if (emailQuery != undefined) {
+        console.log("found user with email: " + email);
         // Generate and send token (simple example)
         res.json({ token: "2342f2f1d131rf12" });
     } else {
@@ -61,12 +58,8 @@ const formValidationRules = [
 
     const { email, password } = req.body;
 
-    userList.push(
-        {
-            userid: email,
-            password: password,
-        }
-    )
+    userServices.addUser({email: email, password: password});
+
     console.log('successfully register user: ' + email);
     res.status(200).send('User registered successfully');
   });
@@ -75,11 +68,11 @@ const formValidationRules = [
   app.get('/users', (req, res) => {
     // filter users by id if given as argument
     if (req.query.username) {
-        const filteredUser = userList.find(user => user.userid === username);
+        const filteredUser = userServices.findUserByEmail(req.query.username);
         return res.json(filteredUser);
     }
 
-    res.json(userList);
+    res.json(userServices.getUsers(undefined));
 });
 
 

@@ -2,18 +2,18 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    email: {
       type: String,
       required: true,
       trim: true,
     },
-    job: {
+    password: {
       type: String,
       required: true,
       trim: true,
       validate(value) {
         if (value.length < 2)
-          throw new Error("Invalid job, must be at least 2 characters.");
+          throw new Error("Invalid password, must be at least 2 characters.");
       },
     },
   },
