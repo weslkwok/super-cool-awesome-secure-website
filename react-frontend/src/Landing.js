@@ -16,7 +16,6 @@ export const Landing = () => {
             'refreshToken': getRefreshToken()
           }
         });
-        console.log(result.data);
         setContactsList(result.data['userList'])
       } catch (error) {
         console.error('Error fetching data: ', error);

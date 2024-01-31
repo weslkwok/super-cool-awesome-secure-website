@@ -70,7 +70,6 @@ export const Registration = () => {
 const handleSubmission = async (data) => {
   try {
     const response = await axios.post('https://localhost:8000/account/register', data);
-    console.log(response.data);
     /* TODO: update login function to take in token from server (instead of having the fake one)
     - add argument to pass in token? Or handle login completely in the auth component (probs better)
     */

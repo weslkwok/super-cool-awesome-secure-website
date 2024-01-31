@@ -79,16 +79,9 @@ app.get('/', (req, res) => {
 
 
 app.post('/account/login', async (req, res) => {
-    console.log('PAINA')
-    console.log(req.body);
     const submittedPassword = req.body['password'];
     const email = req.body['email'];
     const emailQuery = await userServices.findUserByEmail(email);
-    console.log('emailQUERY HIT')
-    console.log(emailQuery)
-    console.log('password found in DB: ' + emailQuery[0].password);
-    console.log('password received: ' + submittedPassword);
-    console.log(bcrypt.compareSync('Pass123!', '$2a$08$.D876zWOR/Fp01b7f9b9Fugc0RRudB773o.x6UVd8wG7/i8yGhq3S'))
     if ((emailQuery.length) && (bcrypt.compareSync(submittedPassword, emailQuery[0].password))) {
         // Generate and send token (simple example)
         const accessToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });

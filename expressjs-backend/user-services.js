@@ -13,14 +13,12 @@ mongoose
 
 async function getUsers() {
   let result;
-  console.log('returning all users');
   result = await userModel.find();
   return result.map(user => user.email);
 }
 
 async function findUserByEmail(email) {
   try {
-    console.log("FINDING ID: " + email);
     return await userModel.find({email: email});
   } catch (error) {
     console.log(error);
@@ -30,7 +28,6 @@ async function findUserByEmail(email) {
 
 async function addUser(user) {
   try {
-    console.log('adding user')
     const userToAdd = new userModel(user);
     const savedUser = await userToAdd.save();
     return savedUser;
