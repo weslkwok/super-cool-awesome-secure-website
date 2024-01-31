@@ -16,6 +16,11 @@ const UserSchema = new mongoose.Schema(
           throw new Error("Invalid password, must be at least 2 characters.");
       },
     },
+    token: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   { collection: "users_list" }
 );

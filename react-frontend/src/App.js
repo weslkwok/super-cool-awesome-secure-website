@@ -1,9 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { Home } from "./Home";
 import { Landing } from "./Landing";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
-import { fakeAuth } from "./utils/FakeAuth";
+import { getJwtToken } from "./context/AuthProvider";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "./context/AuthProvider";
 import { AuthProvider } from "./context/AuthProvider";
@@ -12,20 +12,6 @@ import { Registration } from "./Registration";
 export const AuthContext = React.createContext(null);  // we will use this in other components
 
 const App = () => {
-
-  const [token, setToken] = React.useState(null);
-
-  const handleLogin = async () => {
-
-    const token = await fakeAuth();
-    setToken(token);
-  
-  };
-  
-  const handleLogout = () => {
-    setToken(null);
-  };
-
     return (
     <AuthProvider>
       <Navigation />
@@ -49,7 +35,7 @@ const Navigation = () => {
     <NavLink to="/home">Home</NavLink>
     <NavLink to="/landing">Landing</NavLink>
     <NavLink to="/register">Register</NavLink>
-    {value.token && (
+    {value.isAuthenticated  && (
     <button type="button" onClick={value.onLogout}>
       Sign Out
    </button> )}

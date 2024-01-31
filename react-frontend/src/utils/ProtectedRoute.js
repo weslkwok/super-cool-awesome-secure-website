@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import { getJwtToken, useAuth } from "../context/AuthProvider";
 
 export const ProtectedRoute = ({ children }) => {
   const { value } = useAuth();
-  if (!value.token) {
+  if (!value.isAuthenticated) {
     return <Navigate to="/home" replace />;
   }
   return children;

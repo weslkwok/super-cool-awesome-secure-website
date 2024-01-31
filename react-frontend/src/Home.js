@@ -1,4 +1,4 @@
-import { useAuth } from "./context/AuthProvider";
+import { useAuth, setJwtToken, setRefreshToken, hashPassword } from "./context/AuthProvider";
 
 import axios from 'axios';
 
@@ -64,8 +64,11 @@ export const Home = () => {
   
 const handleSubmission = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/account/login', data);
-    console.log(response.data);
+    const response = await axios.post('https://localhost:8000/account/login', data);
+
+    setJwtToken(response.data['authorization']);
+    setRefreshToken(response.data['refresh']);
+    
     /* TODO: update login function to take in token from server (instead of having the fake one)
     - add argument to pass in token? Or handle login completely in the auth component (probs better)
     */

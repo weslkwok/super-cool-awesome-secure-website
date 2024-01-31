@@ -1,4 +1,4 @@
-import { useAuth } from "./context/AuthProvider";
+import { hashPassword, useAuth, setJwtToken, setRefreshToken } from "./context/AuthProvider";
 
 import axios from 'axios';
 
@@ -69,11 +69,16 @@ export const Registration = () => {
   
 const handleSubmission = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/account/register', data);
+    const response = await axios.post('https://localhost:8000/account/register', data);
     console.log(response.data);
     /* TODO: update login function to take in token from server (instead of having the fake one)
     - add argument to pass in token? Or handle login completely in the auth component (probs better)
     */
+
+    // set session tokens if login success
+    setJwtToken(response.data['authorization']);
+    setRefreshToken(response.data['refresh']);
+
     value.onLogin()
   } catch (error) {
     console.error('Failed Registration:', error.response ? error.response.data : error.message);

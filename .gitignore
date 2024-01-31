@@ -1,0 +1,8 @@
+expressjs-backend/.env
+expressjs-backend/cert.pem
+expressjs-backend/csr.pem
+expressjs-backend/key.pem
+react-frontend/cert.pem
+react-frontend/key.pem
+react-frontend/reactcert/cert.pem
+react-frontend/reactcert/key.pem

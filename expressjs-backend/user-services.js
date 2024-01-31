@@ -11,12 +11,11 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-async function getUsers(email) {
+async function getUsers() {
   let result;
-  if (email === undefined) {
-    result = await userModel.find();
-  }
-  return result;
+  console.log('returning all users');
+  result = await userModel.find();
+  return result.map(user => user.email);
 }
 
 async function findUserByEmail(email) {

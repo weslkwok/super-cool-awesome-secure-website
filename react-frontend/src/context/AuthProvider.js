@@ -1,28 +1,57 @@
-import { createContext, useContext, useState } from "react";
-import { fakeAuth } from "../utils/FakeAuth";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 
 const AuthContext = createContext({});
 
+// Short duration JWT token (1 hour)
+export function getJwtToken() {
+  return sessionStorage.getItem("jwt")
+}
+
+export function setJwtToken(token) {
+  sessionStorage.setItem("jwt", token)
+}
+
+// Longer duration refresh token (1 day)
+export function getRefreshToken() {
+  return sessionStorage.getItem("refreshToken")
+}
+
+export function setRefreshToken(token) {
+  sessionStorage.setItem("refreshToken", token)
+}
+
 export const AuthProvider = ({ children }) => {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check the sessionStorage when the app initializes
+    const jwt = sessionStorage.getItem('jwt');
+    if (jwt) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
     const navigate = useNavigate();
   
-    const [token, setToken] = useState(null);
-  
     const handleLogin = async () => {
-      const token = await fakeAuth();
-      setToken(token);
+      setIsAuthenticated(true);
       navigate("/landing");
     };
   
 
   const handleLogout = () => {
-    setToken(null);
+    setJwtToken(null);
+    setRefreshToken(null);
+    setIsAuthenticated(false);
+    navigate("/home")
   };
 
   const value = {
-    token,
+    isAuthenticated,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };
