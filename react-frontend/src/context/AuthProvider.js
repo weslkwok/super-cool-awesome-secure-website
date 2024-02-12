@@ -28,16 +28,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check the sessionStorage when the app initializes
     const token = getJwtToken();
-    console.log('useEffect');
-    console.log(token);
     if (!(token == null) || (token === 'INVALID_TOKEN')) {
       setIsAuthenticated(false);
-      console.log('setting the token to false...');
-      console.log(value.isAuthenticated);
-
     } else {
-      console.log('true token??')
-      console.log(token);
       setIsAuthenticated(true);
     }
   }, []);
@@ -46,7 +39,6 @@ export const AuthProvider = ({ children }) => {
   
     const handleLogin = async () => {
       setIsAuthenticated(true);
-      navigate("/landing");
     };
   
 
