@@ -7,6 +7,11 @@ import https from 'https';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
 
+import authRouter from './routes/oath.js';
+import requestRouter from './routes/request.js';
+
+import { OAuth2Client } from 'google-auth-library';
+
 const options = {
   key:fs.readFileSync('key.pem'),
   cert:fs.readFileSync('cert.pem')
@@ -28,6 +33,96 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.post("/", async function (req, res, next) {
+
+  res.header("Access-Control-Allow-Origin", "https://localhost:3000");
+
+  res.header("Referrer-Policy", "no-referrer-when-downgrade"); // needed for http
+
+  const redirectUrl = "https://localhost:8000/oath";
+
+  const oAuth2Client = new OAuth2Client(
+
+    process.env.CLIENT_ID,
+
+    process.env.CLIENT_SECRET,
+
+    redirectUrl
+
+  );
+
+  const authorizeUrl = oAuth2Client.generateAuthUrl({
+
+    access_type: "offline",
+
+    scope: "https://www.googleapis.com/auth/userinfo.profile openid",
+
+    prompt: "consent",
+
+  });
+
+  console.log(authorizeUrl);
+
+  res.json({ url: authorizeUrl });
+
+});
+
+async function getUserData(access_token) {
+
+  const response = await fetch(
+
+    `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+
+  );
+
+  const data = await response.json();
+
+  return data.sub;
+
+  // console.log("data", data);
+
+}
+
+// Function to generate JWT
+function generateJWT(user) {
+    const SECRET_KEY = process.env.JWT_SECRET_KEY;
+    const payload = {
+      userId: user,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1d' });
+    return token;
+  }
+
+app.get("/oath", async function (req, res, next) {
+  const code = req.query.code;
+
+  try {
+
+    const redirectUrl = "https://localhost:8000/oath";
+    const oAuth2Client = new OAuth2Client(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+     redirectUrl
+    );
+
+    const result = await oAuth2Client.getToken(code);
+    await oAuth2Client.setCredentials(result.tokens);
+    const user = oAuth2Client.credentials;
+    // show data that is returned from the Google call
+    const userId = await getUserData(user.access_token);
+
+        
+   // call your code to generate a new JWT from your backend, don't reuse Googles
+
+    const token = generateJWT(userId);
+    res.redirect(303, `https://localhost:3000/home?token=${token}`);
+
+    } catch (err) {
+           console.log("Error with signin with Google", err);
+           res.redirect(303, "http://localhost:3000/");
+  }
+
+});
 
 const authenticate = (req, res, next) => {
   const accessToken = req.headers['authorization'];

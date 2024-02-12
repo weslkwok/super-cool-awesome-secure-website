@@ -3,20 +3,15 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { useState, useEffect } from "react";
-import { getJwtToken, getRefreshToken } from "./context/AuthProvider";
+import { getJwtToken, getRefreshToken, useAuth } from "./context/AuthProvider";
 
 export const Landing = () => {
+  const { value } = useAuth();
   const [contactsList, setContactsList] = useState([]);
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const result = await axios.get('https://localhost:8000/users', {
-          headers: {
-            'authorization': getJwtToken(),
-            'refreshToken': getRefreshToken()
-          }
-        });
-        setContactsList(result.data['userList'])
+        console.log('on landing!');
       } catch (error) {
         console.error('Error fetching data: ', error);
       }
@@ -26,14 +21,7 @@ export const Landing = () => {
 
   return (
     <>
-      <h2>Landing Contacts List:</h2>
-      <List component="nav" aria-label="contacts list">
-      {contactsList.map((contact, index) => (
-        <ListItem key={index} button>
-          <ListItemText primary={contact} />
-        </ListItem>
-      ))}
-    </List>
+      <h2>Successfully logged in via OAUTH!!!</h2>
     </>
   );
 };

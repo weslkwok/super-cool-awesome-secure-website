@@ -5,11 +5,7 @@ const AuthContext = createContext({});
 
 // Short duration JWT token (1 hour)
 export function getJwtToken() {
-  return sessionStorage.getItem("jwt")
-}
-
-export function setJwtToken(token) {
-  sessionStorage.setItem("jwt", token)
+  return localStorage.getItem("google_token");
 }
 
 // Longer duration refresh token (1 day)
@@ -21,17 +17,28 @@ export function setRefreshToken(token) {
   sessionStorage.setItem("refreshToken", token)
 }
 
+export function setJwtToken(token) {
+  localStorage.setItem("google_token", token);
+}
+
 export const AuthProvider = ({ children }) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Check the sessionStorage when the app initializes
-    const jwt = sessionStorage.getItem('jwt');
-    if (jwt) {
-      setIsAuthenticated(true);
-    } else {
+    const token = getJwtToken();
+    console.log('useEffect');
+    console.log(token);
+    if (!(token == null) || (token === 'INVALID_TOKEN')) {
       setIsAuthenticated(false);
+      console.log('setting the token to false...');
+      console.log(value.isAuthenticated);
+
+    } else {
+      console.log('true token??')
+      console.log(token);
+      setIsAuthenticated(true);
     }
   }, []);
 
@@ -47,7 +54,8 @@ export const AuthProvider = ({ children }) => {
     setJwtToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);
-    navigate("/home")
+    navigate("/home");
+    window.location.reload(); 
   };
 
   const value = {
