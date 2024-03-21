@@ -7,9 +7,6 @@ import https from 'https';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
 
-import authRouter from './routes/oath.js';
-import requestRouter from './routes/request.js';
-
 import { OAuth2Client } from 'google-auth-library';
 
 const options = {
